@@ -3,6 +3,7 @@ package com.assignment.exceluploaddownload.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,10 +20,12 @@ public class ExcelFileController {
 	private ExcelFileStorageService excelFileStorageService;
 	
 	@RequestMapping(value = "uploadFiles", method = RequestMethod.POST)
-	public Object uploadExcelFiles(@RequestParam("files") MultipartFile files) throws IOException {
-		excelFileStorageService.storeFiles(files);
-		return null;
-	}
+	public Object uploadExcelFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
+		
+		
+		return ResponseEntity.ok()
+				.body(excelFileStorageService.storeFiles(files));
+		}
 	
 	@RequestMapping(value = "downloadFile", method = RequestMethod.GET)
 	public Object downloadExcelFile() {
