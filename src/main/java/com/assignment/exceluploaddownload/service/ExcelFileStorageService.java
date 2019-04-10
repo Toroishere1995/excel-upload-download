@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.assignment.exceluploaddownload.dto.ExcelDataDto;
 import com.assignment.exceluploaddownload.entity.ExcelData;
 import com.assignment.exceluploaddownload.entity.ExcelFile;
+import com.assignment.exceluploaddownload.payload.UploadResponse;
 import com.assignment.exceluploaddownload.repository.ExcelDataRepository;
 import com.assignment.exceluploaddownload.repository.ExcelFileRepository;
 import com.assignment.exceluploaddownload.util.ExcelFileProcessor;
@@ -23,13 +24,21 @@ public class ExcelFileStorageService {
 	@Autowired
 	private ExcelFileRepository excelFileRepository;
 
-	public Object storeFiles(MultipartFile uploadedFile) throws IOException {
-		ExcelFile excelFile = storeExcelFile(uploadedFile);
-		ArrayList<ExcelDataDto> columns = ExcelFileProcessor.convertExcelToEntity(uploadedFile);
-		for (ExcelDataDto column : columns) {
-			ExcelData excelData = storeExcelDataValues(column, excelFile);
+	public Object storeFiles(MultipartFile[] uploadedFiles) throws IOException {
+		ArrayList<UploadResponse> response = new ArrayList<>();
+		for (MultipartFile uploadedFile : uploadedFiles) {
+			UploadResponse uploadResponse = new UploadResponse();
+			ExcelFile excelFile = storeExcelFile(uploadedFile);
+			uploadResponse.setFilename(excelFile.getName());
+			ArrayList<ExcelDataDto> columns = ExcelFileProcessor.convertExcelToEntity(uploadedFile);
+			for (ExcelDataDto column : columns) {
+				storeExcelDataValues(column, excelFile);
+				uploadResponse.getColoumnHeadings().add(column.getColumnHeading());
+			}
+
+			response.add(uploadResponse);
 		}
-		return null;
+		return response;
 	}
 
 	private ExcelFile storeExcelFile(MultipartFile uploadedFile) throws IOException {
