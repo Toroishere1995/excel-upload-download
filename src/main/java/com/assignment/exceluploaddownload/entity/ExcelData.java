@@ -20,41 +20,44 @@ public class ExcelData {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String columnName;
+	private String columnHeading;
 
-	private String[] columnData ;
+	private String[] columnValues;
 
-	public void setColumnData(String[] columnData) {
-		this.columnData = columnData;
-	}
-
-	@ManyToOne(optional = false,fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "EXCEL_FILES_ID")
 	private ExcelFile excelFile;
 
-	public Long getId() {
-		return id;
+	public String[] getColumnValues() {
+		return columnValues;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public String getColumnHeading() {
+		return columnHeading;
 	}
-
-	public String getColumnName() {
-		return columnName;
-	}
-
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
-	}
-
 
 	public ExcelFile getExcelFile() {
 		return excelFile;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setColumnValues(String[] columnValues) {
+		this.columnValues = columnValues;
+	}
+
+	public void setColumnHeading(String columnHeading) {
+		this.columnHeading = columnHeading;
+	}
+
 	public void setExcelFile(ExcelFile excelFile) {
 		this.excelFile = excelFile;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }
