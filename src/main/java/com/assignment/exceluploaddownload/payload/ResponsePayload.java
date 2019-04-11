@@ -1,14 +1,22 @@
 package com.assignment.exceluploaddownload.payload;
 
 public class ResponsePayload {
-
+	
+	private String status;
+	
 	private String code;
-
+	
 	private String message;
-
+	
 	private Object result;
 
-	private String status;
+	public ResponsePayload(String code, String message, Object result, String status) {
+		// TODO Auto-generated constructor stub
+		this.code = code;
+		this.message = message;
+		this.result = result;
+		this.status = status;
+	}
 
 	public String getCode() {
 		return code;
