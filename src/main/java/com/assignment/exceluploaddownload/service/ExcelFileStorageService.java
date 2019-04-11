@@ -2,12 +2,16 @@ package com.assignment.exceluploaddownload.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.assignment.exceluploaddownload.entity.ExcelFile;
+import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.payload.UploadResponse;
 import com.assignment.exceluploaddownload.repository.ExcelFileRepository;
 import com.assignment.exceluploaddownload.util.ExcelFileProcessor;
@@ -22,8 +26,8 @@ public class ExcelFileStorageService {
 	@Autowired
 	private ExcelFileRepository excelFileRepository;
 
-	public Object storeFiles(MultipartFile[] uploadedFiles) throws IOException {
-		ArrayList<UploadResponse> response = new ArrayList<>();
+	public List<UploadResponse> storeFiles(MultipartFile[] uploadedFiles) throws IOException {
+		List<UploadResponse> response = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadedFiles) {
 			UploadResponse uploadResponse = new UploadResponse();
 			ExcelFile excelFile = storeExcelFile(uploadedFile);
@@ -53,9 +57,16 @@ public class ExcelFileStorageService {
 	 * excelDataRepository.save(excelData); }
 	 */
 	public void downloadFile(String file1Id, String file2Id) {
-		ExcelFile excelFile = excelFileRepository.getOne(Long.parseLong(file1Id));
-		ExcelFile excelFile2 = excelFileRepository.getOne(Long.parseLong(file2Id));
-		String columnOrder[] = { "ID", "NAME", "FAME", "GAME", "DI", "LASTNAME" };
-		ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(), excelFile2.getContent());
+		try {
+			ExcelFile excelFile = excelFileRepository.getOne(Long.parseLong(file1Id));
+
+			ExcelFile excelFile2 = excelFileRepository.getOne(Long.parseLong(file2Id));
+			String columnOrder[] = { "ID", "NAME", "FAME", "GAME", "DI", "LASTNAME" };
+			ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(),
+					excelFile2.getContent());
+
+		} catch (EntityNotFoundException e) {
+			throw new ExcelFileNotFoundException("Id for files is incorrect");
+		}
 	}
 }
