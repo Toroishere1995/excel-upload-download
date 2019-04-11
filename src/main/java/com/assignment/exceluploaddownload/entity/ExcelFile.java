@@ -19,15 +19,21 @@ public class ExcelFile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
-	
+
 	@Lob
 	private byte[] content;
-	
-	@OneToMany(cascade = CascadeType.ALL ,mappedBy = "excelFile" )
-	private Set<ExcelData> data=new HashSet<ExcelData>();
 
+	/*
+	 * @OneToMany(cascade = CascadeType.ALL ,mappedBy = "excelFile" ) private
+	 * Set<ExcelData> data=new HashSet<ExcelData>(); public Set<ExcelData> getData()
+	 * { return data; }
+	 * 
+	 * public void setData(Set<ExcelData> data) { this.data = data; }
+	 */
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -52,13 +58,4 @@ public class ExcelFile {
 		this.content = content;
 	}
 
-	public Set<ExcelData> getData() {
-		return data;
-	}
-
-	public void setData(Set<ExcelData> data) {
-		this.data = data;
-	}
-	
-	
 }
