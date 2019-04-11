@@ -18,18 +18,16 @@ public class ExcelFileController {
 
 	@Autowired
 	private ExcelFileStorageService excelFileStorageService;
-	
+
 	@RequestMapping(value = "uploadFiles", method = RequestMethod.POST)
 	public Object uploadExcelFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
-		
-		
-		return ResponseEntity.ok()
-				.body(excelFileStorageService.storeFiles(files));
-		}
-	
+
+		return ResponseEntity.ok().body(excelFileStorageService.storeFiles(files));
+	}
+
 	@RequestMapping(value = "downloadFile", method = RequestMethod.GET)
-	public Object downloadExcelFile() {
-		
+	public Object downloadExcelFile(@RequestParam("file1Id") String file1Id, @RequestParam("file2Id") String file2Id) {
+		excelFileStorageService.downloadFile(file1Id, file2Id);
 		return null;
 	}
 }
