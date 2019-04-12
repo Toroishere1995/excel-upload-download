@@ -1,5 +1,6 @@
 package com.assignment.exceluploaddownload.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.payload.UploadResponse;
 import com.assignment.exceluploaddownload.repository.ExcelFileRepository;
 import com.assignment.exceluploaddownload.util.ExcelFileProcessor;
+import com.assignment.exceluploaddownload.validation.MultipartFileValidator;
 
 @Service
 public class ExcelFileStorageService {
@@ -26,11 +28,20 @@ public class ExcelFileStorageService {
 	@Autowired
 	private ExcelFileRepository excelFileRepository;
 
-	public List<UploadResponse> storeFiles(MultipartFile[] uploadedFiles) throws IOException {
+	@Autowired
+	private MultipartFileValidator validator;
+
+	public List<UploadResponse> storeFiles(MultipartFile[] uploadedFiles) {
+		validator.validate(uploadedFiles, null);
 		List<UploadResponse> response = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadedFiles) {
 			UploadResponse uploadResponse = new UploadResponse();
-			ExcelFile excelFile = storeExcelFile(uploadedFile);
+			ExcelFile excelFile;
+			try {
+				excelFile = storeExcelFile(uploadedFile);
+			} catch (IOException e) {
+				throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
+			}
 			uploadResponse.setFilename(excelFile.getName());
 			ArrayList<String> columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(excelFile.getContent());
 			uploadResponse.setColoumnHeadings(columns);
@@ -56,17 +67,19 @@ public class ExcelFileStorageService {
 	 * excelData.setExcelFile(excelFile); excelFile.getData().add(excelData); return
 	 * excelDataRepository.save(excelData); }
 	 */
-	public void downloadFile(String file1Id, String file2Id) {
+	public ByteArrayInputStream downloadFile(String file1Id, String file2Id) {
+		ByteArrayInputStream stream = null;
 		try {
 			ExcelFile excelFile = excelFileRepository.getOne(Long.parseLong(file1Id));
 
 			ExcelFile excelFile2 = excelFileRepository.getOne(Long.parseLong(file2Id));
 			String columnOrder[] = { "ID", "NAME", "FAME", "GAME", "DI", "LASTNAME" };
-			ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(),
+			stream = ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(),
 					excelFile2.getContent());
 
 		} catch (EntityNotFoundException e) {
 			throw new ExcelFileNotFoundException("Id for files is incorrect");
 		}
+		return stream;
 	}
 }
