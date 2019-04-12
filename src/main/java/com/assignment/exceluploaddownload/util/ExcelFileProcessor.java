@@ -1,5 +1,7 @@
 package com.assignment.exceluploaddownload.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +14,9 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
+import com.assignment.exceluploaddownload.exception.ExcelFileProcessingException;
 
 public class ExcelFileProcessor {
 
@@ -59,30 +64,28 @@ public class ExcelFileProcessor {
 				headers.add(headerValue);
 			}
 		} catch (Exception e) {
-			// TODO
+			throw new ExcelFileProcessingException("Headers are not valid text.");
 		}
 		return headers;
 	}
 
-	public static void concatenateTwoFilesWithOrder(String[] columnOrder, byte[] file1, byte[] file2) {
+	public static ByteArrayInputStream concatenateTwoFilesWithOrder(String[] columnOrder, byte[] file1, byte[] file2) {
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
 		try {
 
 			XSSFSheet firstFileSheet = getXSSFSheetForFile(file1);
 			XSSFSheet secondFileSheet = getXSSFSheetForFile(file2);
 			XSSFWorkbook outWorkBook = reArrange(firstFileSheet, secondFileSheet, columnOrder);
-			File mergedFile = new File("C:\\outExcel.xlsx");
-			if (!mergedFile.exists()) {
-				mergedFile.createNewFile();
-			}
-
-			FileOutputStream out = new FileOutputStream(mergedFile);
 			outWorkBook.write(out);
 			out.close();
 			System.out.println("File Columns Were Re-Arranged Successfully");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
+
 		}
+		return new ByteArrayInputStream(out.toByteArray());
 	}
 
 	private static XSSFWorkbook reArrange(XSSFSheet firstFileSheet, XSSFSheet secondFileSheet, String[] columnOrder) {
@@ -178,8 +181,8 @@ public class ExcelFileProcessor {
 			mainSheet = fileWorkbook.getSheetAt(0);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
 		}
 		if (mainSheet == null) {
 			// throw ;
