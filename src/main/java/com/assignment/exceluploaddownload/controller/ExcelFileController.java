@@ -1,10 +1,15 @@
 package com.assignment.exceluploaddownload.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,16 +29,21 @@ public class ExcelFileController {
 	@RequestMapping(value = "uploadFiles", method = RequestMethod.POST)
 	public ResponseEntity<ResponsePayload> uploadExcelFiles(@RequestParam("files") MultipartFile[] files)
 			throws IOException {
-		ResponsePayload payload = new ResponsePayload("201",
-				"Excel Files uploaded successfully", excelFileStorageService.storeFiles(files),
-				"POST SUCCESSFUL");
+		
+		ResponsePayload payload = new ResponsePayload("201", "Excel Files uploaded successfully",
+				excelFileStorageService.storeFiles(files), "POST SUCCESSFUL");
 		return new ResponseEntity<>(payload, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "downloadFile", method = RequestMethod.GET)
-	public Object downloadExcelFile(@RequestParam("file1Id") String file1Id, @RequestParam("file2Id") String file2Id) {
+	public ResponseEntity<InputStreamResource> downloadExcelFile(@RequestParam("file1Id") String file1Id,
+			@RequestParam("file2Id") String file2Id) {
 
-		excelFileStorageService.downloadFile(file1Id, file2Id);
-		return null;
+		ByteArrayInputStream stream = excelFileStorageService.downloadFile(file1Id, file2Id);
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "merged.xlsx" + "\"")
+				.body(new InputStreamResource(stream));
+
 	}
 }
