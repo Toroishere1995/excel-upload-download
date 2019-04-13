@@ -211,6 +211,9 @@ public class ExcelFileProcessor {
 						break;
 					}
 				}
+				if(colNum.intValue() == -1) {
+					throw new ExcelFileProcessingException("Header specified does not exist");
+				}
 				value.append("s_");
 
 			} else {
