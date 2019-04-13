@@ -43,6 +43,7 @@ public class ExcelFileStorageService {
 				throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
 			}
 			uploadResponse.setFilename(excelFile.getName());
+			uploadResponse.setId(excelFile.getId());
 			ArrayList<String> columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(excelFile.getContent());
 			uploadResponse.setColoumnHeadings(columns);
 			response.add(uploadResponse);
@@ -67,13 +68,14 @@ public class ExcelFileStorageService {
 	 * excelData.setExcelFile(excelFile); excelFile.getData().add(excelData); return
 	 * excelDataRepository.save(excelData); }
 	 */
-	public ByteArrayInputStream downloadFile(String file1Id, String file2Id) {
+	public ByteArrayInputStream downloadFile(String file1Id, String file2Id,ArrayList<String> headings) {
 		ByteArrayInputStream stream = null;
 		try {
 			ExcelFile excelFile = excelFileRepository.getOne(Long.parseLong(file1Id));
 
 			ExcelFile excelFile2 = excelFileRepository.getOne(Long.parseLong(file2Id));
-			String columnOrder[] = { "ID", "NAME", "FAME", "GAME", "DI", "LASTNAME" };
+			String columnOrder[] = new String[headings.size()];
+			columnOrder=headings.toArray(columnOrder);
 			stream = ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(),
 					excelFile2.getContent());
 
