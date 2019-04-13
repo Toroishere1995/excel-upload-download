@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UploadResponse {
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	private List<String> coloumnHeadings = new ArrayList<>();
 
