@@ -36,15 +36,16 @@ public class ExcelFileStorageService {
 		List<UploadResponse> response = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadedFiles) {
 			UploadResponse uploadResponse = new UploadResponse();
+			ArrayList<String> columns ;
 			ExcelFile excelFile;
 			try {
+				columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(uploadedFile.getBytes());
 				excelFile = storeExcelFile(uploadedFile);
 			} catch (IOException e) {
 				throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
 			}
 			uploadResponse.setFilename(excelFile.getName());
 			uploadResponse.setId(excelFile.getId());
-			ArrayList<String> columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(excelFile.getContent());
 			uploadResponse.setColoumnHeadings(columns);
 			response.add(uploadResponse);
 		}
