@@ -8,6 +8,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.exception.ExcelFileProcessingException;
 
+/**
+ * Validator class for validating multipart file.
+ * 
+ * @author ayushsaxena
+ *
+ */
 @Component
 public class MultipartFileValidator implements Validator {
 
@@ -17,11 +23,15 @@ public class MultipartFileValidator implements Validator {
 		return false;
 	}
 
+	/**
+	 * Method to validate excel file. It checks whether the file is an excel file,
+	 * size etc.
+	 */
 	@Override
 	public void validate(Object target, Errors errors) {
 
 		MultipartFile[] multipartFiles = (MultipartFile[]) target;
-		if(multipartFiles.length==0) {
+		if (multipartFiles.length == 0) {
 			throw new ExcelFileNotFoundException("No files added yet");
 		}
 		for (MultipartFile file : multipartFiles) {

@@ -18,6 +18,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.exception.ExcelFileProcessingException;
 
+/**
+ * Util class for retrieving header from files and writing a new file by merging
+ * both the files.
+ * 
+ * @author ayushsaxena
+ *
+ */
 public class ExcelFileProcessor {
 
 	/*
@@ -54,6 +61,12 @@ public class ExcelFileProcessor {
 	 * columnNameWithValues; }
 	 */
 
+	/**
+	 * Method to retrieve column headers.
+	 * 
+	 * @param excelFile
+	 * @return
+	 */
 	public static ArrayList<String> retrieveHeadersFromExcelFile(byte[] excelFile) {
 		ArrayList<String> headers = new ArrayList<>();
 		try {
@@ -69,6 +82,14 @@ public class ExcelFileProcessor {
 		return headers;
 	}
 
+	/**
+	 * Method for concatenating both excel files with the order of column .
+	 * 
+	 * @param columnOrder
+	 * @param file1
+	 * @param file2
+	 * @return
+	 */
 	public static ByteArrayInputStream concatenateTwoFilesWithOrder(String[] columnOrder, byte[] file1, byte[] file2) {
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -88,6 +109,14 @@ public class ExcelFileProcessor {
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 
+	/**
+	 * Method to arrange coloumn names in the output excel sheet.
+	 * 
+	 * @param firstFileSheet
+	 * @param secondFileSheet
+	 * @param columnOrder
+	 * @return
+	 */
 	private static XSSFWorkbook reArrange(XSSFSheet firstFileSheet, XSSFSheet secondFileSheet, String[] columnOrder) {
 		// TODO Auto-generated method stub
 		LinkedHashMap<String, String> headerMap = mapHeaders(columnOrder, firstFileSheet, secondFileSheet);
@@ -125,6 +154,15 @@ public class ExcelFileProcessor {
 		return outWorkbook;
 	}
 
+	/**
+	 * Method for filling values in cells of output excel file.
+	 * 
+	 * @param outSheet
+	 * @param fileRow
+	 * @param cellNum
+	 * @param columnIndex
+	 * @param createdRow
+	 */
 	private static void fillCellsOfOutFile(XSSFSheet outSheet, XSSFRow fileRow, int cellNum, Integer columnIndex,
 			XSSFRow createdRow) {
 
@@ -165,6 +203,12 @@ public class ExcelFileProcessor {
 
 	}
 
+	/**
+	 * Method to provide XSSFSheet.
+	 * 
+	 * @param file
+	 * @return
+	 */
 	private static XSSFSheet getXSSFSheetForFile(byte[] file) {
 		File convFile = new File("file");
 		FileOutputStream fos;
@@ -190,6 +234,14 @@ public class ExcelFileProcessor {
 		return mainSheet;
 	}
 
+	/**
+	 * Method to map column name of excel files with the received order of column.
+	 * 
+	 * @param columnOrder
+	 * @param firstFileSheet
+	 * @param secondFileSheet
+	 * @return
+	 */
 	public static LinkedHashMap<String, String> mapHeaders(String[] columnOrder, XSSFSheet firstFileSheet,
 			XSSFSheet secondFileSheet) {
 		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
@@ -211,7 +263,7 @@ public class ExcelFileProcessor {
 						break;
 					}
 				}
-				if(colNum.intValue() == -1) {
+				if (colNum.intValue() == -1) {
 					throw new ExcelFileProcessingException("Header specified does not exist");
 				}
 				value.append("s_");

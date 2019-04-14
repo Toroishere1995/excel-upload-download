@@ -2,6 +2,12 @@ package com.assignment.exceluploaddownload.dto;
 
 import java.util.ArrayList;
 
+/**
+ * Class used as a DTO for sending required data as a response.
+ * 
+ * @author ayushsaxena
+ *
+ */
 public class ExcelDataDto {
 
 	private String columnHeading;

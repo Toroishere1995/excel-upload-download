@@ -18,6 +18,13 @@ import com.assignment.exceluploaddownload.repository.ExcelFileRepository;
 import com.assignment.exceluploaddownload.util.ExcelFileProcessor;
 import com.assignment.exceluploaddownload.validation.MultipartFileValidator;
 
+/**
+ * Service class for handling business operations consisting of excel file
+ * processing.
+ * 
+ * @author ayushsaxena
+ *
+ */
 @Service
 public class ExcelFileStorageService {
 
@@ -31,12 +38,19 @@ public class ExcelFileStorageService {
 	@Autowired
 	private MultipartFileValidator validator;
 
+	/**
+	 * Method to store excel files in db, and return the list of headers and
+	 * filename.
+	 * 
+	 * @param uploadedFiles
+	 * @return
+	 */
 	public List<UploadResponse> storeFiles(MultipartFile[] uploadedFiles) {
 		validator.validate(uploadedFiles, null);
 		List<UploadResponse> response = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadedFiles) {
 			UploadResponse uploadResponse = new UploadResponse();
-			ArrayList<String> columns ;
+			ArrayList<String> columns;
 			ExcelFile excelFile;
 			try {
 				columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(uploadedFile.getBytes());
@@ -52,6 +66,13 @@ public class ExcelFileStorageService {
 		return response;
 	}
 
+	/**
+	 * Method to store Excel file in DB.
+	 * 
+	 * @param uploadedFile
+	 * @return
+	 * @throws IOException
+	 */
 	private ExcelFile storeExcelFile(MultipartFile uploadedFile) throws IOException {
 		ExcelFile excelFile = new ExcelFile();
 		excelFile.setContent(uploadedFile.getBytes());
@@ -69,14 +90,23 @@ public class ExcelFileStorageService {
 	 * excelData.setExcelFile(excelFile); excelFile.getData().add(excelData); return
 	 * excelDataRepository.save(excelData); }
 	 */
-	public ByteArrayInputStream downloadFile(String file1Id, String file2Id,ArrayList<String> headings) {
+
+	/**
+	 * Method for downloading excel file.
+	 * 
+	 * @param file1Id
+	 * @param file2Id
+	 * @param headings
+	 * @return
+	 */
+	public ByteArrayInputStream downloadFile(String file1Id, String file2Id, ArrayList<String> headings) {
 		ByteArrayInputStream stream = null;
 		try {
 			ExcelFile excelFile = excelFileRepository.getOne(Long.parseLong(file1Id));
 
 			ExcelFile excelFile2 = excelFileRepository.getOne(Long.parseLong(file2Id));
 			String columnOrder[] = new String[headings.size()];
-			columnOrder=headings.toArray(columnOrder);
+			columnOrder = headings.toArray(columnOrder);
 			stream = ExcelFileProcessor.concatenateTwoFilesWithOrder(columnOrder, excelFile.getContent(),
 					excelFile2.getContent());
 

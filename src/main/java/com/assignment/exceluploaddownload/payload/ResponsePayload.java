@@ -1,13 +1,19 @@
 package com.assignment.exceluploaddownload.payload;
 
+/**
+ * Payload Class for response.
+ * 
+ * @author ayushsaxena
+ *
+ */
 public class ResponsePayload {
-	
+
 	private String status;
-	
+
 	private String code;
-	
+
 	private String message;
-	
+
 	private Object result;
 
 	public ResponsePayload(String code, String message, Object result, String status) {

@@ -6,8 +6,17 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * Configuration class to get the bean for CORS filter.
+ * @author ayushsaxena
+ *
+ */
 @Configuration
 public class RestConfig {
+	/**
+	 * Method to return bean for CORS filter.
+	 * @return
+	 */
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

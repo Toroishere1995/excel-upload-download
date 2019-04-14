@@ -4,6 +4,12 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 
+/**
+ * Class for holding constants.
+ * 
+ * @author ayushsaxena
+ *
+ */
 public class Constants {
 
 	public static final Map<String, String> CODES_HASH;

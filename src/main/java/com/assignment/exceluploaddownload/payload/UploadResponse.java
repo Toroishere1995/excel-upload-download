@@ -3,6 +3,12 @@ package com.assignment.exceluploaddownload.payload;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for result attribute of ResponsePayload.
+ * 
+ * @author ayushsaxena
+ *
+ */
 public class UploadResponse {
 	private Long id;
 

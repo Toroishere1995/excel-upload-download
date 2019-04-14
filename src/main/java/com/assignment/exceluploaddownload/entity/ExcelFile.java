@@ -12,6 +12,12 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Entity class for database.
+ * 
+ * @author ayushsaxena
+ *
+ */
 @Entity
 @Table(name = "EXCEL_FILES")
 public class ExcelFile {
@@ -32,8 +38,7 @@ public class ExcelFile {
 	 * 
 	 * public void setData(Set<ExcelData> data) { this.data = data; }
 	 */
-	
-	
+
 	public Long getId() {
 		return id;
 	}
