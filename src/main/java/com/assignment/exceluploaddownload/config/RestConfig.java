@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.assignment.exceluploaddownload.constants.Constants;
+
 /**
  * Configuration class to get the bean for CORS filter.
  * @author ayushsaxena
@@ -22,7 +24,7 @@ public class RestConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("http://localhost:4200");
+		config.addAllowedOrigin(Constants.ALLOWED_ORIGIN);
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("OPTIONS");
 		config.addAllowedMethod("GET");

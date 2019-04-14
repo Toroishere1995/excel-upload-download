@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.assignment.exceluploaddownload.constants.Constants;
 import com.assignment.exceluploaddownload.payload.ResponsePayload;
 import com.assignment.exceluploaddownload.service.ExcelFileStorageService;
 
@@ -44,7 +45,7 @@ public class ExcelFileController {
 	public ResponseEntity<ResponsePayload> uploadExcelFiles(@RequestParam("files") MultipartFile[] files)
 			throws IOException {
 
-		ResponsePayload payload = new ResponsePayload("201", "Excel Files uploaded successfully",
+		ResponsePayload payload = new ResponsePayload(Constants.STATUS_CODE_201, Constants.EXCEL_FILES_UPLOAD_SUCCESS,
 				excelFileStorageService.storeFiles(files), "POST SUCCESSFUL");
 		return new ResponseEntity<>(payload, HttpStatus.OK);
 	}

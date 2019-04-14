@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.assignment.exceluploaddownload.constants.Constants;
 import com.assignment.exceluploaddownload.entity.ExcelFile;
 import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.payload.UploadResponse;
@@ -56,7 +57,7 @@ public class ExcelFileStorageService {
 				columns = ExcelFileProcessor.retrieveHeadersFromExcelFile(uploadedFile.getBytes());
 				excelFile = storeExcelFile(uploadedFile);
 			} catch (IOException e) {
-				throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
+				throw new ExcelFileNotFoundException(Constants.CURROPT_FILE);
 			}
 			uploadResponse.setFilename(excelFile.getName());
 			uploadResponse.setId(excelFile.getId());
@@ -111,7 +112,7 @@ public class ExcelFileStorageService {
 					excelFile2.getContent());
 
 		} catch (EntityNotFoundException e) {
-			throw new ExcelFileNotFoundException("Id for files is incorrect");
+			throw new ExcelFileNotFoundException(Constants.INVALID_FILE_ID);
 		}
 		return stream;
 	}

@@ -47,4 +47,27 @@ public class Constants {
 		CODES_MSG_HASH = Collections.unmodifiableMap(tempMsg);
 	}
 
+	public static final String INVALID_HEADER = "Headers are not valid text.";
+
+	public static final String CURROPT_FILE = "File not found or maybe it is corrupt";
+
+	public static final String HEADER_NOT_EXIST = "Header specified does not exist";
+
+	public static final String INVALID_FILE_ID = "Id for files is incorrect";
+	
+	public static final String STATUS_CODE_404="404";
+	
+	public static final String STATUS_CODE_415="415";
+	
+	public static final String STATUS_CODE_201="201";
+	
+	public static final String RESOURCE_NOT_FOUND="RESOURCE NOT FOUND";
+	
+	public static final String NO_FILE_OR_INVALID_SIZE="Either no file or file size issue.";
+	
+	public static final String UNSUPPORTED_FILE="UNSUPPORTED FILE TYPE";
+	
+	public static final String EXCEL_FILES_UPLOAD_SUCCESS="Excel Files uploaded successfully";
+	
+	public static final String ALLOWED_ORIGIN="http://localhost:4200";
 }

@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.assignment.exceluploaddownload.constants.Constants;
 import com.assignment.exceluploaddownload.exception.ExcelFileNotFoundException;
 import com.assignment.exceluploaddownload.exception.ExcelFileProcessingException;
 
@@ -77,7 +78,7 @@ public class ExcelFileProcessor {
 				headers.add(headerValue);
 			}
 		} catch (Exception e) {
-			throw new ExcelFileProcessingException("Headers are not valid text.");
+			throw new ExcelFileProcessingException(Constants.INVALID_HEADER);
 		}
 		return headers;
 	}
@@ -103,7 +104,7 @@ public class ExcelFileProcessor {
 			out.close();
 			System.out.println("File Columns Were Re-Arranged Successfully");
 		} catch (IOException e) {
-			throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
+			throw new ExcelFileNotFoundException(Constants.CURROPT_FILE);
 
 		}
 		return new ByteArrayInputStream(out.toByteArray());
@@ -226,7 +227,7 @@ public class ExcelFileProcessor {
 
 		} catch (IOException e) {
 
-			throw new ExcelFileNotFoundException("File not found or maybe it is corrupt");
+			throw new ExcelFileNotFoundException(Constants.CURROPT_FILE);
 		}
 		if (mainSheet == null) {
 			// throw ;
@@ -264,7 +265,7 @@ public class ExcelFileProcessor {
 					}
 				}
 				if (colNum.intValue() == -1) {
-					throw new ExcelFileProcessingException("Header specified does not exist");
+					throw new ExcelFileProcessingException(Constants.HEADER_NOT_EXIST);
 				}
 				value.append("s_");
 
